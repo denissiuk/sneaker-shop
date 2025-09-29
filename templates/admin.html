@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Админка</h2>
+
+<h3>Добавить кроссовки</h3>
+<form method="post">
+    Название: <input name="name" required><br>
+    Цена: <input name="price" type="number" step="0.01" required><br>
+    Ссылка на фото (URL): <input name="image_url" placeholder="https://example.com/photo.jpg"><br>
+    <button>Добавить</button>
+</form>
+
+<h3>Список моделей</h3>
+{% for s in sneakers %}
+  <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+    <img src="{{ s.image_url }}" alt="{{ s.name }}" style="width:50px; height:auto; vertical-align:middle; margin-right:10px;">
+    <strong>{{ s.name }}</strong> — {{ s.price }} руб.
+    <a href="{{ url_for('edit_sneaker', id=s.id) }}">Редактировать</a>
+    <form method="post" action="{{ url_for('delete_sneaker', id=s.id) }}" style="display:inline;" onsubmit="return confirm('Удалить?')">
+        <button type="submit" style="color:red;">Удалить</button>
+    </form>
+  </div>
+{% endfor %}
+{% endblock %}

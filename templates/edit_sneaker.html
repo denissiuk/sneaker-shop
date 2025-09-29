@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Редактировать кроссовки</h2>
+<form method="post">
+    Название: <input name="name" value="{{ sneaker.name }}" required><br>
+    Цена: <input name="price" type="number" step="0.01" value="{{ sneaker.price }}" required><br>
+    Ссылка на фото: <input name="image_url" value="{{ sneaker.image_url }}" placeholder="https://example.com/photo.jpg"><br>
+    <button type="submit">Сохранить</button>
+    <a href="/admin">← Назад в админку</a>
+</form>
+{% endblock %}

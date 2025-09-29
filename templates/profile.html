@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Личный кабинет: {{ user.username }}</h2>
+<p>Email: {{ user.email }}</p>
+<p>Вы {% if user.is_admin %}админ{% else %}покупатель{% endif %}</p>
+<a href="/">← Каталог</a>
+{% endblock %}

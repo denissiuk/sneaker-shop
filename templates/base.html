@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}NANOGI{% endblock %}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            color: #333;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: -1px;
+            color: #000;
+        }
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            background: #f5f5f5;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #7c3aed;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #7c3aed;
+        }
+        .nav {
+            display: flex;
+            gap: 15px;
+            margin: 15px 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .flash {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin: 10px 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">NANOGI</div>
+        <div class="header-right">
+            <div class="cart-icon" onclick="window.location='/cart'">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M3 6h18v2a6 6 0 0112 0v2a6 6 0 01-12 0v-2H3v2a6 6 0 0012 0v-2H3z"></path>
+                </svg>
+                {% if session.user_id %}
+                    {% set cart_count = CartItem.query.filter_by(user_id=session.user_id).count() %}
+                    {% if cart_count > 0 %}
+                        <span class="cart-count">{{ cart_count }}</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% if session.user_id %}
+                <img src="https://via.placeholder.com/40" alt="Аватар" class="avatar" onclick="window.location='/profile'">
+            {% else %}
+                <a href="/login" style="color:#007bff; font-weight:500;">Войти</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="nav">
+        <a href="/">Каталог</a>
+        <a href="/cart">Корзина</a>
+        {% if session.user_id %}
+            <a href="/profile">ЛК</a>
+            <a href="/logout">Выйти</a>
+            {% if current_user and current_user.is_admin %}
+                <a href="/admin">Админка</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="flash">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
