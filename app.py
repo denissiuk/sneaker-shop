@@ -2,10 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from models import db, User, Sneaker, CartItem, Order
 from datetime import datetime
 import asyncio
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
-import os
+
+# Подключение к базе данных
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///shop.db')
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
@@ -252,4 +254,9 @@ def checkout():
     return redirect('/profile')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(
+        host='0.0.0.0',
+        port=port,
+        debug=False  # ← ОБЯЗАТЕЛЬНО False на Render!
+    )
